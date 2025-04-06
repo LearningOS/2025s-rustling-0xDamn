@@ -8,14 +8,6 @@ fn sort<T: Ord>(array: &mut [T]) {
     if array.len() <= 1 {
         return;
     }
-
-    let pivot_index = partition(array);
-    let (left, right) = array.split_at_mut(pivot_index);
-    sort(left);
-    sort(&mut right[1..]);
-}
-
-fn partition<T: Ord>(array: &mut [T]) -> usize {
     let pivot_index = array.len() - 1;
     let mut i = 0;
 
@@ -27,8 +19,12 @@ fn partition<T: Ord>(array: &mut [T]) -> usize {
     }
 
     array.swap(i, pivot_index);
-    i
+
+    let (left, right) = array.split_at_mut(i);
+    sort(left);
+    sort(&mut right[1..]);
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
