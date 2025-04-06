@@ -5,7 +5,29 @@
 */
 
 fn sort<T: Ord>(array: &mut [T]) {
-    array.sort();
+    if array.len() <= 1 {
+        return;
+    }
+
+    let pivot_index = partition(array);
+    let (left, right) = array.split_at_mut(pivot_index);
+    sort(left);
+    sort(&mut right[1..]);
+}
+
+fn partition<T: Ord>(array: &mut [T]) -> usize {
+    let pivot_index = array.len() - 1;
+    let mut i = 0;
+
+    for j in 0..pivot_index {
+        if array[j] <= array[pivot_index] {
+            array.swap(i, j);
+            i += 1;
+        }
+    }
+
+    array.swap(i, pivot_index);
+    i
 }
 #[cfg(test)]
 mod tests {
@@ -30,4 +52,3 @@ mod tests {
         assert_eq!(vec, vec![11, 22, 33, 44, 55, 66, 77, 88, 99]);
     }
 }
-
